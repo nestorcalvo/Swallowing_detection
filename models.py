@@ -359,7 +359,11 @@ def DecisionTree(X,y,folds, optimizer=True,*args, **kwargs):
             f1, sensitivity, specificity,c_matrix = statistical_information(list(y_test),list(y_predicted),classes_order)
             print(accuracy)
 
-            result_dict[f'Fold {i+1}'] = {'accuracy_best_model':accuracy,
+            result_dict[f'Fold {i+1}'] = {'param_used':{'criterion':best_criterion,
+                                                        'max_depth':best_depth,
+                                                        'min_samples_split':best_samples_split,
+                                                        'max_leaf_nodes':best_leaf_nodes},
+                                            'accuracy_best_model':accuracy,
                                             'f1_score':f1,
                                             'sensitivity':sensitivity,
                                             'specificity':specificity,
@@ -428,7 +432,11 @@ def RandomForest(X,y,folds, optimizer=True,*args, **kwargs):
             f1, sensitivity, specificity,c_matrix = statistical_information(list(y_test),list(y_predicted),classes_order)
             print(accuracy)
 
-            result_dict[f'Fold {i+1}'] = {'accuracy_best_model':accuracy,
+            result_dict[f'Fold {i+1}'] = {'param_used':{'max_features':best_max_features,
+                                                        'max_depth':best_depth,
+                                                        'min_samples_split':best_samples_split,
+                                                        'n_estimators':best_n_estimators},
+                                            'accuracy_best_model':accuracy,
                                             'f1_score':f1,
                                             'sensitivity':sensitivity,
                                             'specificity':specificity,
@@ -501,7 +509,10 @@ def SVM_Classifier(X,y,folds,optimizer = True,*args, **kwargs):
             f1, sensitivity, specificity,c_matrix = statistical_information(list(y_test),list(y_predicted),classes_order)
             print(accuracy)
 
-            result_dict[f'Fold {i+1}'] = {'param_used':{'C':best_C,'gamma':best_gamma,'kernel':best_kernel},'accuracy_best_model':accuracy,
+            result_dict[f'Fold {i+1}'] = {'param_used':{'C':best_C,
+                                                        'gamma':best_gamma,
+                                                        'kernel':best_kernel},
+                                            'accuracy_best_model':accuracy,
                                             'f1_score':f1,
                                             'sensitivity':sensitivity,
                                             'specificity':specificity,
