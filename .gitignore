@@ -6,6 +6,16 @@ __pycache__/
 # C extensions
 *.so
 
+<<<<<<< Updated upstream
+=======
+# Project folders
+Papers/
+Recordings/
+Results/
+Presentation_GITA/
+.vscode/
+
+>>>>>>> Stashed changes
 # Distribution / packaging
 .Python
 build/
