@@ -12,7 +12,7 @@ Recordings/
 Results/
 Presentation_GITA/
 .vscode/
-
+.Metadata_private.csv
 # Distribution / packaging
 .Python
 build/
