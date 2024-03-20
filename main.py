@@ -66,3 +66,24 @@ signal_analysis.store_spectograms_features(PATH_SPECTOGRAM_FEATURE)
 with open(PATH_SPECTOGRAM_FEATURE, 'rb') as output:
     spectograms_features = pickle.load(output)
     
+#%%
+
+result_to_check = result_best_param_RF
+accuracy_toal = []
+f1_score_total = []
+
+for key in result_to_check.keys():
+  accuracy_toal.append(result_to_check[key]["accuracy_best_model"])
+  f1_score_total.append(result_to_check[key]["f1_score"])
+
+mean_accuracy = np.mean(accuracy_toal)
+mean_f1_score = np.mean(f1_score_total)
+
+std_accuracy = np.std(accuracy_toal)
+std_f1_score = np.std(f1_score_total)
+
+print(mean_accuracy, "+-", std_accuracy)
+print(mean_f1_score, "+-", std_f1_score)
+
+#%%
+print(pd.Series(features.iloc[6]['x_segment']).ewm(span=7))

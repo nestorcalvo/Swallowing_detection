@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import librosa
 from scipy.stats import skew, norm, kurtosis
-from scipy.stats import skew, norm, kurtosis
 from scipy.signal import hilbert
 from scipy.interpolate import CubicSpline
 from utils import calculate_energy, spectogram_calc, butter_lowpass_filter
@@ -86,6 +85,7 @@ def handcrafted_feature_creation(dataset, hop_length, frame_length, signal_type)
           filter_order = 6
           # Hilbert and lowpass filter
           signal_name = f'{signal}_segment'
+          
           dataset.loc[:, signal_name] = dataset.loc[:, signal_name].apply(
               lambda x: np.abs(hilbert(x)))
 
@@ -95,12 +95,18 @@ def handcrafted_feature_creation(dataset, hop_length, frame_length, signal_type)
           data.loc[:, signal_name] = dataset.loc[:, signal_name].apply(
               lambda x: x[1200:-1200])
           # Energy
+          data[f'{signal}_log'] = data.loc[:, signal_name].apply(
+              lambda x: np.log(x))
           data[f'energy_{signal}'] = data[signal_name].apply(
               lambda x: calculate_energy(x, frame_length, hop_length))
           data[f'energy_{signal}_mean'] = data[f'energy_{signal}'].apply(
               lambda energy_array: np.mean(energy_array))
           data[f'energy_{signal}_std'] = data[f'energy_{signal}'].apply(
               lambda energy_array: np.std(energy_array))
+          data[f'energy_{signal}_skew'] = data[f'energy_{signal}'].apply(
+              lambda energy_array: skew(energy_array))
+          data[f'energy_{signal}_kurt'] = data[f'energy_{signal}'].apply(
+              lambda energy_array: kurtosis(energy_array))
           new_t = dataset['time_array'].apply(
               lambda x: x[1200:-1200])
           data['new_time_array'] = new_t
@@ -109,6 +115,15 @@ def handcrafted_feature_creation(dataset, hop_length, frame_length, signal_type)
           data[f'coefs_{signal}_aur'] = data[signal_name].apply(lambda x: AutoReg(x, lags = lag).fit().params)
           for i in range(lag):
             data[f'coefs_{signal}_aur_{i}'] = data[f'coefs_{signal}_aur'].apply(lambda x: x[i])
+            
+            
+          data[f'{signal}_normalize'] = data[signal_name].apply(lambda x: (x - np.min(x))/np.max(x))
+          data[f'{signal}_mean'] = data[f'{signal}_normalize'].apply(lambda x: np.mean(x))
+          data[f'{signal}_std'] = data[f'{signal}_normalize'].apply(lambda x: np.std(x))
+          data[f'{signal}_skew'] = data[f'{signal}_normalize'].apply(lambda x: skew(x))
+          data[f'{signal}_kurt'] = data[f'{signal}_normalize'].apply(lambda x: kurtosis(x))
+          
+          data[f'{signal}_gradient'] = data[f'{signal}_normalize'].apply(lambda x: np.gradient(x))
           data.drop('new_time_array', axis = 1, inplace = True)
     return data
 

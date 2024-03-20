@@ -162,8 +162,11 @@ def classical_model_dataset(features, task_number_column, signal_type = 'T', ful
 
       else:
 
-        feature = ['duration',f'energy_{signal}_mean',
+        feature = ['duration',
+             f'energy_{signal}_mean',
              f'energy_{signal}_std',
+             f'energy_{signal}_skew',
+             f'energy_{signal}_kurt',
              f'coefs_{signal}_aur_0',
              f'coefs_{signal}_aur_1',
              f'coefs_{signal}_aur_2',
@@ -173,7 +176,11 @@ def classical_model_dataset(features, task_number_column, signal_type = 'T', ful
              f'coefs_{signal}_aur_6',
              f'coefs_{signal}_aur_7',
              f'coefs_{signal}_aur_8',
-             f'coefs_{signal}_aur_9',]
+             f'coefs_{signal}_aur_9',
+             f'{signal}_mean',
+             f'{signal}_std',
+             f'{signal}_skew',
+             f'{signal}_kurt']
         if i == 0:
             basic = features[feature]
         else:
@@ -186,7 +193,7 @@ def classical_model_dataset(features, task_number_column, signal_type = 'T', ful
     if not full_classes:
         y = features['label'].map(lambda x: x[0])
     else:
-        y = features['label'].map(lambda x: x)
+        y = features['label'].map(lambda x: x.strip())
     group = list(features['ID'])
 
     return X, y, group
@@ -476,6 +483,11 @@ def SVM_Classifier(X,y,folds,optimizer = True,*args, **kwargs):
                 ('model', SVC(probability=True))
             ])
             grid_search = GridSearchCV(estimator=svm_classifier, param_grid=param_grid, scoring='accuracy')
+# =============================================================================
+#             scaler = StandardScaler()
+#             X_train = scaler.fit_transform(X_train)
+#             X_test = scaler.transform(X_test)
+# =============================================================================
             grid_search.fit(X_train, y_train)
             best_params = grid_search.best_params_
             best_model = grid_search.best_estimator_
