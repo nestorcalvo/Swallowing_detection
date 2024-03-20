@@ -113,11 +113,11 @@ def spectogram_calc(data_audio,FS,NFFT,MELS,NOVERLAP,signal):
 def read_audio_info(RECORDINGS_PATH, signal_type = 'T'):
     signal_type = signal_type.lower()
     if signal_type == 't':
-        pattern = '_t'
-        other_signal_pattern = '_m'
+        pattern = '_t/'
+        other_signal_pattern = '_m/'
     elif signal_type == 'm':
-        pattern = '_m'
-        other_signal_pattern = '_t'
+        pattern = '_m/'
+        other_signal_pattern = '_t/'
     else:
         print('Early fusion modality')
     reg_path = f'/**/*_{signal_type}/*.txt'
@@ -125,18 +125,21 @@ def read_audio_info(RECORDINGS_PATH, signal_type = 'T'):
     info_array = []
     index = 1
     # Find the folder name of a task for a type of signal
-    regex_instance = f'[0-9]*_[a-zA-Z]*_{signal_type}'
+    regex_instance = f'[0-9]*_[a-zA-Z]*_{signal_type}/'
     p = re.compile(regex_instance)
     print("Creating dataset with segments...")
     for f in files:
         # Gets the name of the folder
         result = p.search(f)
         match = result.group(0)
+        
         # Replace the signal type with the other signal and creates a path
         match_changed = match.replace(pattern, other_signal_pattern)
+        
         other_modality_path = f.replace(match, match_changed)
         # Checks if this new path is there to see if that task has the other signal
         if not os.path.isfile(other_modality_path):
+            
             continue
         # BASIC INFORMATION FOR DATASET
         f = os.path.normpath(f)

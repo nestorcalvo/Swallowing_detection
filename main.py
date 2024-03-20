@@ -8,7 +8,7 @@ from models import *
 from signal_analysis import SignalAnalysis
 
     
-signal_type = 'M'
+signal_type = 'T'
 full_classes = True
 LOSO = True
 
@@ -68,7 +68,7 @@ with open(PATH_SPECTOGRAM_FEATURE, 'rb') as output:
     
 #%%
 
-result_to_check = result_best_param_RF
+result_to_check = result_best_param_SVM
 accuracy_toal = []
 f1_score_total = []
 
