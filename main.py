@@ -8,7 +8,7 @@ from models import *
 from signal_analysis import SignalAnalysis
 
     
-signal_type = 'T'
+signal_type = 'M'
 full_classes = True
 LOSO = True
 

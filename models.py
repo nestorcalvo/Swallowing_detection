@@ -467,12 +467,13 @@ def SVM_Classifier(X,y,folds,optimizer = True,*args, **kwargs):
         #Get info of each folder
         train_set_folder = folds[folder]['train']
         test_set_folder = folds[folder]['test']
-
+ 
         X_train = X.iloc[train_set_folder]
         y_train = y.iloc[train_set_folder]
 
         X_test = X.iloc[test_set_folder]
         y_test = y.iloc[test_set_folder]
+        
 
         print(f"FOLD #{i+1}")
         print(f"X train shape: {X_train.shape} and y train shape: {y_train.shape}")

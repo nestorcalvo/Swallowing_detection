@@ -130,17 +130,18 @@ def read_audio_info(RECORDINGS_PATH, signal_type = 'T'):
     print("Creating dataset with segments...")
     for f in files:
         # Gets the name of the folder
-        result = p.search(f)
-        match = result.group(0)
-        
-        # Replace the signal type with the other signal and creates a path
-        match_changed = match.replace(pattern, other_signal_pattern)
-        
-        other_modality_path = f.replace(match, match_changed)
-        # Checks if this new path is there to see if that task has the other signal
-        if not os.path.isfile(other_modality_path):
+        if signal_type !='mt':
+            result = p.search(f)
+            match = result.group(0)
             
-            continue
+            # Replace the signal type with the other signal and creates a path
+            match_changed = match.replace(pattern, other_signal_pattern)
+            
+            other_modality_path = f.replace(match, match_changed)
+            # Checks if this new path is there to see if that task has the other signal
+            if not os.path.isfile(other_modality_path):
+                
+                continue
         # BASIC INFORMATION FOR DATASET
         f = os.path.normpath(f)
         subject_id = int(f.split(os.sep)[-3])
@@ -308,12 +309,12 @@ def read_audio_info(RECORDINGS_PATH, signal_type = 'T'):
     print("Dataset created succesfully")
     return info_array
 
-def create_dataset(signal_type = 'T'):
-    name = f'information_dataset_{signal_type}.pickle'
+def create_dataset(name, signal_type = 'T'):
+    
     signal_type = signal_type.lower()
-    if os.path.exists(os.path.join(RESULTS_PATH,name)):
+    if os.path.exists(name):
         print("File already exist, no need to create a new one")
-        with open(os.path.join(RESULTS_PATH,name), 'rb') as output:
+        with open(name, 'rb') as output:
             info_dataframe = pickle.load(output)
             print("File loaded succesfully")
     else:
@@ -329,7 +330,7 @@ def create_dataset(signal_type = 'T'):
             return
         info_dataframe.set_index('Seg', inplace=True)
         
-        with open(os.path.join(RESULTS_PATH,name), 'wb') as output:
+        with open(name, 'wb') as output:
             pickle.dump(info_dataframe,output) 
         print(f"Dataset stored succesfully as {name}")
     return info_dataframe
