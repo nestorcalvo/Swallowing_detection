@@ -5,6 +5,8 @@ import os
 import seaborn as sns
 import glob
 import itertools
+from scipy.io import wavfile
+
 def normalize_signal(y):
   # Calculate the maximum amplitude
   max_amplitude = np.max(np.abs(y))
@@ -21,9 +23,6 @@ def normalize_signal(y):
   # Center the audio around zero by subtracting the mean amplitude
   normalized_audio = normalized_audio - mean_amplitude
   return normalized_audio
-
-
-from scipy.io import wavfile
 
 GENERAL_PATH = 'Recordings'
 subject_folder = [f.path for f in os.scandir(GENERAL_PATH) if f.is_dir()]
